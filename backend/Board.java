@@ -1,4 +1,4 @@
-package gr.ntua.multimediatechnology;
+package backend;
 
 import java.util.ArrayList;
 
@@ -74,9 +74,13 @@ public class Board
         }
     }
     
-    public int getHitOutcome(int x, int y) throws AlreadyBeenShotException
+    public int getHitOutcome(Coordinate c)
     {
-        if(grid[x][y].hasBeenShot()) throw new AlreadyBeenShotException();
+        // normally returns what the cell is occupied by (water or ship id)
+        // -1 in cases of error (invalid coordinate or one that has been shot already)
+        if(!Coordinate.isValidCoordinate(c)) return -1;
+        int x = c.getX(), y = c.getY();
+        if(grid[x][y].hasBeenShot()) return -1;
         grid[x][y].shoot();
         
         return grid[x][y].getOccupation();

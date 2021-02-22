@@ -1,4 +1,4 @@
-package gr.ntua.multimediatechnology;
+package backend;
 
 public class Destroyer extends Ship
 {

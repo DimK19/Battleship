@@ -1,4 +1,4 @@
-package gr.ntua.multimediatechnology;
+package backend;
 
 @SuppressWarnings("serial")
 public class OverlapTilesException extends Exception

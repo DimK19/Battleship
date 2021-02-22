@@ -1,15 +1,18 @@
-package gr.ntua.multimediatechnology;
+package backend;
 
 import java.util.Scanner;
 
 public class HumanPlayer extends Player
 {
+    private Coordinate latestMove;
 
     public HumanPlayer()
     {
         super();
+        latestMove = new Coordinate(-1, -1);
     }
 
+    // for command line implementation
     @Override
     public Coordinate makeMove()
     {
@@ -21,6 +24,15 @@ public class HumanPlayer extends Player
         return ans;
     }
     
-    
+    // for GUI
+    public Coordinate getLatestMove()
+    {
+        return latestMove;
+    }
+
+    public void setLatestMove(Coordinate latestMove)
+    {
+        this.latestMove = latestMove;
+    }
 
 }

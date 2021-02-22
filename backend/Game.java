@@ -1,4 +1,4 @@
-package gr.ntua.multimediatechnology;
+package backend;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,9 +10,10 @@ public class Game
 {
     String playerFilePath = "src/resources/player_default.txt";
     String computerFilePath = "src/resources/computer_default.txt";
-    Board playerBoard, computerBoard;
-    HumanPlayer player;
-    ComputerPlayer computer;
+    public Board playerBoard, computerBoard;
+    public HumanPlayer player;
+    public ComputerPlayer computer;
+    //boolean turn; // 1 -> player, 0 -> computer
     
     public Game() throws IOException, OverlapTilesException, OversizeException, AdjacentTilesException, InvalidCountException
     {
@@ -57,43 +58,29 @@ public class Game
                 while(!validMove)
                 {
                     currentMove = player.makeMove();
-                    try
-                    {
-                        outcome = computerBoard.getHitOutcome(currentMove.getX(), currentMove.getY());
-                        validMove = true;
-                        computer.updateShips(outcome);
-                        player.incrementMoveCounter();
-                    }
-                    catch (AlreadyBeenShotException e)
-                    {
-                        e.printStackTrace();
-                    }
+                    outcome = computerBoard.getHitOutcome(currentMove);
+                    validMove = true;
+                    computer.updateShips(outcome);
+                    player.incrementMoveCounter();
                 }
             }
             else
                while(!validMove)
                {
                    currentMove = computer.makeMove();
-                   try
-                   {
-                       outcome = playerBoard.getHitOutcome(currentMove.getX(), currentMove.getY());
-                       validMove = true;
-                       player.updateShips(outcome);
-                       computer.incrementMoveCounter();
-                   }
-                   catch (AlreadyBeenShotException e)
-                   {
-                       e.printStackTrace();
-                   }
+                   outcome = playerBoard.getHitOutcome(currentMove);
+                   validMove = true;
+                   player.updateShips(outcome);
+                   computer.incrementMoveCounter();
                }
             flag ^= true;
         }
         while(checkGameState() == 0);
     }
     
-    private boolean decideOrder()
+    public boolean decideOrder()
     {
-        return new Random().nextBoolean();
+        return (new Random()).nextBoolean();
     }
     
     public void printBoard()
@@ -101,7 +88,7 @@ public class Game
         System.out.println(this.playerBoard);
     }
 
-    private int checkGameState()
+    public int checkGameState()
     {
         /* 0: game still going on
          * 1: computer player has lost all ships
