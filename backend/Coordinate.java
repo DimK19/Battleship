@@ -58,4 +58,9 @@ public class Coordinate
     {
         return y;
     }
+    
+    public String toString()
+    {
+        return String.valueOf((char)(x + 'A')) + String.valueOf(y + 1);
+    }
 }

@@ -9,6 +9,7 @@ public class Destroyer extends Ship
         this.numberOfSlots = 2;
         this.points = 50;
         this.sinkBonus = 0;
+        this.name = "Destroyer";
     }
 
 }

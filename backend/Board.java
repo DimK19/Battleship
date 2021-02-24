@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Board
 {
+    static String[] entities = {"Water", "Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
     private Cell[][] grid = new Cell[10][10];
     
     public Board(ArrayList<String> positions) throws OverlapTilesException, OversizeException, AdjacentTilesException, InvalidCountException

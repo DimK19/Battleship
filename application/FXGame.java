@@ -25,6 +25,8 @@ public class FXGame
     public void activateGame() throws IOException, OverlapTilesException, OversizeException, AdjacentTilesException, InvalidCountException
     {
         game = new Game();
+        playerFXBoard.flush();
+        computerFXBoard.flush();
         if(!game.decideOrder()) computerTurn(); // 1 -> player, 0 -> computer
         running = true;
     }
@@ -54,6 +56,7 @@ public class FXGame
 
         game.computer.updateShips(outcome);
         game.player.incrementMoveCounter();
+        game.player.pushToMoves(currentMove, outcome);
         playerFXBoard.update(currentMove, outcome);
         
         return true;
@@ -65,6 +68,7 @@ public class FXGame
         int outcome = game.playerBoard.getHitOutcome(currentMove);
         game.player.updateShips(outcome);
         game.computer.incrementMoveCounter();
+        game.computer.pushToMoves(currentMove, outcome);
         computerFXBoard.update(currentMove, outcome);
     }
 

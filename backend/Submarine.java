@@ -9,6 +9,7 @@ public class Submarine extends Ship
         this.numberOfSlots = 3;
         this.points = 100;
         this.sinkBonus = 0;
+        this.name = "Submarine";
     }
 
 }

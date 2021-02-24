@@ -2,6 +2,7 @@ package application;
 
 import backend.Coordinate;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -37,11 +38,19 @@ public class Main extends Application
         
         MenuItem exitOption = new MenuItem("Exit");
         appMenu.getItems().add(exitOption);
-        exitOption.setOnAction(e -> {primaryStage.close();});
-            
+        exitOption.setOnAction(e -> {Platform.exit();});
+        
+        Menu detailsMenu = new Menu("Details");
+        
+        MenuItem enemyShipsOption = new MenuItem("Enemy Ships");
+        MenuItem playerShotsOption = new MenuItem("Player Shots");
+        MenuItem computerShotsOption = new MenuItem("Computer Shots");
+        detailsMenu.getItems().addAll(enemyShipsOption, playerShotsOption, computerShotsOption);
+        
+        
         // create menu bar
         MenuBar menuBar = new MenuBar();
-        menuBar.getMenus().addAll(appMenu);
+        menuBar.getMenus().addAll(appMenu, detailsMenu);
             
         // playing board
         FXBoard board1 = new FXBoard();
@@ -145,14 +154,87 @@ public class Main extends Application
             }
         });
         
+        enemyShipsOption.setOnAction(lambda -> {
+            if(fxgame.isRunning())
+            {
+                Stage stage = new Stage();
+                stage.setTitle("Enemy Ships");
+                stage.setResizable(false);
+                
+                Label report = new Label();
+                report.setText(fxgame.game.computer.getShipReport());
+                
+                Button close = new Button("Close");
+                close.setOnAction(foo -> {stage.close();});
+                
+                VBox hb = new VBox();
+                hb.getChildren().addAll(report, close);
+                
+                Scene popup = new Scene(hb, 300, 190);
+                stage.setScene(popup);
+                stage.show();
+            }
+        });
+        
+        playerShotsOption.setOnAction(lambda -> {
+            if(fxgame.isRunning())
+            {
+                Stage stage = new Stage();
+                stage.setTitle("Player Shots");
+                stage.setResizable(false);
+                
+                Label report = new Label();
+                report.setText(fxgame.game.player.getShotReport());
+                
+                Button close = new Button("Close");
+                close.setOnAction(foo -> {stage.close();});
+                
+                VBox hb = new VBox();
+                hb.getChildren().addAll(report, close);
+                
+                Scene popup = new Scene(hb, 300, 190);
+                stage.setScene(popup);
+                stage.show();
+            }
+        });
+        
+        computerShotsOption.setOnAction(lambda -> {
+            if(fxgame.isRunning())
+            {
+                showPopUp("Computer Shots", fxgame.game.computer.getShotReport());
+            }
+        });
+        
         Scene scene = new Scene(root, 800, 500);
         scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("MediaLab Battleship");
         primaryStage.setResizable(false);
+        primaryStage.setOnCloseRequest(e -> {Platform.exit();});
+        // closes all pop-ups upon exiting with 'X', otherwise they remain open
         primaryStage.show();
     }
 
+    private void showPopUp(String title, String param)
+    {
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setResizable(false);
+        
+        Label report = new Label();
+        report.setText(param);
+        
+        Button close = new Button("Close");
+        close.setOnAction(foo -> {stage.close();});
+        
+        VBox hb = new VBox();
+        hb.getChildren().addAll(report, close);
+        
+        Scene popup = new Scene(hb, 300, 190);
+        stage.setScene(popup);
+        stage.show();
+    }
+    
 	public static void main(String[] args)
 	{
 		launch(args);

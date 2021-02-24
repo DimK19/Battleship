@@ -9,6 +9,7 @@ public class Cruiser extends Ship
         this.numberOfSlots = 3;
         this.points = 100;
         this.sinkBonus = 250;
+        this.name = "Cruiser";
     }
 
 }

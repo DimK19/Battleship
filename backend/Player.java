@@ -7,14 +7,14 @@ public abstract class Player
 {
     private int movesPlayed, points;
     private ArrayList<Ship> ships;
-    private Stack<Coordinate> allMovesStack;
+    private Stack<CustomPair> allMovesStack;
     private boolean[][] hitArray;
     
     public Player()
     {
         this.movesPlayed = 0;
         this.points = 0;
-        allMovesStack = new Stack<Coordinate>();
+        allMovesStack = new Stack<CustomPair>();
         
         hitArray = new boolean[20][20];
         /*
@@ -72,20 +72,47 @@ public abstract class Player
         else ships.get(--type).hit();
     }
     
-    public Stack<Coordinate> getAllMovesStack()
+    public Stack<CustomPair> getAllMovesStack()
     {
         return allMovesStack;
     }
 
-    public void pushToMoves(Coordinate c)
+    public void pushToMoves(Coordinate c, int outcome)
     {
-        this.allMovesStack.push(c);
+        this.allMovesStack.push(new CustomPair(c, outcome));
         hitArray[c.getX()][c.getY()] = true;
     }
     
     public boolean hasBeenShot(Coordinate c)
     {
         return hitArray[c.getX()][c.getY()];
+    }
+    
+    public String getShipReport()
+    {
+        String r = "";
+        
+        for(Ship s : this.ships)
+        {
+            String temp = s.getName() + ' ' + s.getState() + '\n';
+            r += temp;
+        }
+        
+        return r;
+    }
+    
+    public String getShotReport()
+    {
+        String r = "";
+        
+        for(int i = allMovesStack.size() - 1; i >= Math.max(allMovesStack.size() - 5, 0); --i)
+        {
+            CustomPair cm = allMovesStack.get(i);
+            System.out.println(cm.getLeft().toString() + ' ' + Board.entities[cm.getRight()]);
+            r += cm.getLeft().toString() + ' ' + Board.entities[cm.getRight()] + '\n';
+        }
+
+        return r;
     }
     
     public abstract Coordinate makeMove();

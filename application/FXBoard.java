@@ -37,10 +37,21 @@ public class FXBoard
         Node temp = board.getChildren().get(y);
         temp = ((HBox)temp).getChildren().get(x);
         
-        if(outcome == 0) ((FXCell)temp).changeColor(false);
-        else ((FXCell)temp).changeColor(true);
+        if(outcome == 0) ((FXCell)temp).changeColor(Color.AQUA); // hit water
+        else ((FXCell)temp).changeColor(Color.RED); // hit something
         // Casting is necessary because getChildren doesn't know about 
         // the type of its children, and returns the base class (Node)
+    }
+    
+    public void flush()
+    {
+        for(int i = 0; i < 10; ++i)
+            for(int j = 0; j < 10; ++j)
+            {
+                Node temp = board.getChildren().get(i);
+                temp = ((HBox)temp).getChildren().get(j);
+                ((FXCell)temp).changeColor(Color.LIGHTGRAY);
+            }
     }
     
     private class FXCell extends Rectangle
@@ -60,11 +71,9 @@ public class FXBoard
             setStroke(Color.BLACK);
         }
         
-        public void changeColor(boolean b)
+        public void changeColor(Color c)
         {
-            // b == true means the cell contains a ship
-            if(b) setFill(Color.RED);
-            else setFill(Color.AQUA);
+            setFill(c);
         }
 
     }

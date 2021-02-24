@@ -9,6 +9,7 @@ public class Battleship extends Ship
         this.numberOfSlots = 4;
         this.points = 250;
         this.sinkBonus = 500;
+        this.name = "Battleship";
     }
 
 }

@@ -2,12 +2,14 @@ package backend;
 
 public class Ship
 {
-    protected int numberOfSlots, points, sinkBonus;
-    public int hitsTaken;
+    int numberOfSlots, points, sinkBonus;
+    int hitsTaken;
+    String name;
     
     public Ship()
     {
         this.hitsTaken = 0;
+        this.name = "Generic Ship";
     }
     
     public String getState()
@@ -19,6 +21,11 @@ public class Ship
         else s = "sunken";
         
         return s;
+    }
+    
+    public String getName()
+    {
+        return this.name;
     }
     
     public int getSlots()

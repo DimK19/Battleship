@@ -21,8 +21,6 @@ public class ComputerPlayer extends Player
         do candidateMove = new Coordinate(rn.nextInt(10), rn.nextInt(10));
         while(hasBeenShot(candidateMove));
         
-        pushToMoves(candidateMove);
         return candidateMove;
     }
-
 }
