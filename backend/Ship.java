@@ -9,6 +9,8 @@ public class Ship
     public Ship()
     {
         this.hitsTaken = 0;
+        this.points = 0;
+        this.sinkBonus = 0;
         this.name = "Generic Ship";
     }
     
@@ -31,6 +33,16 @@ public class Ship
     public int getSlots()
     {
         return this.numberOfSlots;
+    }
+    
+    public int getPoints()
+    {
+        return points;
+    }
+    
+    public int getSinkBonus()
+    {
+        return sinkBonus;
     }
     
     public void hit()

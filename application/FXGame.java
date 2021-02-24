@@ -57,6 +57,9 @@ public class FXGame
         game.computer.updateShips(outcome);
         game.player.incrementMoveCounter();
         game.player.pushToMoves(currentMove, outcome);
+        if(outcome > 0)
+            if(game.computer.getShips().get(outcome - 1).getState().equals("sunken"))
+                game.player.addPoints(game.computer.getShips().get(outcome - 1).getSinkBonus());
         playerFXBoard.update(currentMove, outcome);
         
         return true;
@@ -69,6 +72,9 @@ public class FXGame
         game.player.updateShips(outcome);
         game.computer.incrementMoveCounter();
         game.computer.pushToMoves(currentMove, outcome);
+        if(outcome > 0)
+            if(game.player.getShips().get(outcome - 1).getState().equals("sunken"))
+                game.computer.addPoints(game.player.getShips().get(outcome - 1).getSinkBonus());
         computerFXBoard.update(currentMove, outcome);
     }
 

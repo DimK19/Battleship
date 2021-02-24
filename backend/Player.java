@@ -7,7 +7,7 @@ public abstract class Player
 {
     private int movesPlayed, points;
     private ArrayList<Ship> ships;
-    private Stack<CustomPair> allMovesStack;
+    Stack<CustomPair> allMovesStack;
     private boolean[][] hitArray;
     
     public Player()
@@ -34,6 +34,11 @@ public abstract class Player
         return this.movesPlayed;
     }
     
+    public ArrayList<Ship> getShips()
+    {
+        return ships;
+    }
+    
     public int getActiveShips()
     {
         int counter = 0;
@@ -46,26 +51,27 @@ public abstract class Player
         return points;
     }
     
+    public void addPoints(int n)
+    {
+        points += n;
+    }
+    
     public double getSuccessRate()
     {
-        return 0;
+        if(allMovesStack.isEmpty()) return 0;
+        int sum = 0;
+        
+        for(CustomPair m : allMovesStack)
+            if(m.getRight() != 0) sum++;
+        
+        return (double)sum / (double)allMovesStack.size();
     }
     
     public void incrementMoveCounter()
     {
         this.movesPlayed++;
     }
-    
-    public boolean hasLostAllShips()
-    {
-        for(Ship s : ships)
-        {
-            if(!s.getState().equals("sunken")) return false;
-        }
-        
-        return true;
-    }
-    
+
     public void updateShips(int type)
     {
         if(type <= 0) return;
@@ -81,11 +87,17 @@ public abstract class Player
     {
         this.allMovesStack.push(new CustomPair(c, outcome));
         hitArray[c.getX()][c.getY()] = true;
+        if(outcome > 0) this.addPoints(ships.get(outcome - 1).getPoints());
     }
     
     public boolean hasBeenShot(Coordinate c)
     {
         return hitArray[c.getX()][c.getY()];
+    }
+    
+    public boolean hasBeenShot(int x, int y)
+    {
+        return hitArray[x][y];
     }
     
     public String getShipReport()

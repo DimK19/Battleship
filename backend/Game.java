@@ -8,8 +8,8 @@ import java.util.Random;
 
 public class Game
 {
-    String playerFilePath = "src/resources/player_default.txt";
-    String computerFilePath = "src/resources/computer_default.txt";
+    static String playerFilePath = "src/resources/player_default.txt";
+    static String computerFilePath = "src/resources/computer_default.txt";
     public Board playerBoard, computerBoard;
     public HumanPlayer player;
     public ComputerPlayer computer;
@@ -17,8 +17,8 @@ public class Game
     
     public Game() throws IOException, OverlapTilesException, OversizeException, AdjacentTilesException, InvalidCountException
     {
-        this.playerBoard = new Board(this.readFile(this.playerFilePath));
-        this.computerBoard = new Board(this.readFile(this.computerFilePath));
+        this.playerBoard = new Board(this.readFile(playerFilePath));
+        this.computerBoard = new Board(this.readFile(computerFilePath));
         
         this.player = new HumanPlayer();
         this.computer = new ComputerPlayer();
@@ -42,6 +42,13 @@ public class Game
         return l;
     }
     
+    public static void setFilePath(String p)
+    {
+        playerFilePath = "src/resources/player_" + p + ".txt";
+        computerFilePath = "src/resources/enemy_" + p + ".txt";
+    }
+    
+    // for command line implementation
     public void play()
     {
         boolean flag = decideOrder(), validMove;
@@ -62,6 +69,10 @@ public class Game
                     validMove = true;
                     computer.updateShips(outcome);
                     player.incrementMoveCounter();
+                    player.pushToMoves(currentMove, outcome);
+                    if(outcome > 0)
+                        if(computer.getShips().get(outcome - 1).getState().equals("sunken"))
+                            player.addPoints(computer.getShips().get(outcome - 1).getSinkBonus());
                 }
             }
             else
@@ -72,6 +83,10 @@ public class Game
                    validMove = true;
                    player.updateShips(outcome);
                    computer.incrementMoveCounter();
+                   computer.pushToMoves(currentMove, outcome);
+                   if(outcome > 0)
+                       if(player.getShips().get(outcome - 1).getState().equals("sunken"))
+                           computer.addPoints(player.getShips().get(outcome - 1).getSinkBonus());
                }
             flag ^= true;
         }
@@ -96,8 +111,8 @@ public class Game
          * 3: 40 moves have been played with no victor
          */
         int state;
-        if(computer.hasLostAllShips()) state = 1;
-        else if(player.hasLostAllShips()) state = 2;
+        if(computer.getActiveShips() == 0) state = 1;
+        else if(computer.getActiveShips() == 0) state = 2;
         else if(player.getMovesPlayed() == 40 && computer.getMovesPlayed() == 40) state = 3;
         else state = 0;
         System.out.println(state);

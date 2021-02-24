@@ -1,6 +1,7 @@
 package application;
 
 import backend.Coordinate;
+import backend.Game;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -30,9 +31,8 @@ public class Main extends Application
         Menu appMenu = new Menu("Application");
 
         MenuItem startOption = new MenuItem("Start");
-        appMenu.getItems().add(startOption);
-        
-        appMenu.getItems().add(new MenuItem("Load"));
+        MenuItem loadOption = new MenuItem("Load");
+        appMenu.getItems().addAll(startOption, loadOption);
         
         appMenu.getItems().add(new SeparatorMenuItem());
         
@@ -54,7 +54,6 @@ public class Main extends Application
             
         // playing board
         FXBoard board1 = new FXBoard();
-        
         FXBoard board2 = new FXBoard();
 
         
@@ -96,7 +95,32 @@ public class Main extends Application
             letters2.getChildren().add(l2);
         }
             
-            
+        
+        // create top labels
+        Label pShipsLabel = new Label("Player Active Ships");
+        Label pslValue = new Label(""); 
+        Label pPointsLabel = new Label("Player Points");
+        Label pplValue = new Label("");
+        Label pRateLabel = new Label("Player Success Rate");
+        Label prlValue = new Label("");
+        
+        HBox pline1 = new HBox();
+        pline1.getChildren().addAll(pShipsLabel, pslValue);
+        HBox pline2 = new HBox();
+        pline2.getChildren().addAll(pPointsLabel, pplValue);
+        HBox pline3 = new HBox();
+        pline3.getChildren().addAll(pRateLabel, prlValue);
+        
+        VBox playerInfoBox = new VBox();
+        playerInfoBox.getChildren().addAll(pline1, pline2, pline3);
+        root.setLeft(playerInfoBox);
+        
+        /*
+        Label cShipsLabel = new Label("Computer Active Ships");
+        Label cPointsLabel = new Label("Computer Points");
+        Label cRateLabel = new Label("Computer Success Rate");
+        */
+        
         // install boards
         // board1.setAlignment(Pos.CENTER);
         // letters.setAlignment(Pos.CENTER);
@@ -123,12 +147,18 @@ public class Main extends Application
         root.setCenter(gridPane);
         
         // set up game
+        loadOption.setOnAction(lambda -> { formPopUp(); });
+        
         FXGame fxgame = new FXGame(board1, board2);
         startOption.setOnAction(f -> {
             // flush everything
             try
             {
                 fxgame.activateGame();
+                //pslValue.textProperty().bind(new SimpleIntegerProperty(fxgame.game.player.getActiveShips()).asString());
+                //pplValue.textProperty().bind(new SimpleIntegerProperty(fxgame.game.player.getTotalPoints()).asString());
+                //prlValue.textProperty().bind(new SimpleStringProperty(String.format("%.2g", fxgame.game.player.getSuccessRate())));
+                //System.out.println("Was");
             }
             catch (Exception e)
             {
@@ -146,9 +176,21 @@ public class Main extends Application
                     moveField.clear();
                     if(fxgame.playerTurn())
                     {
+                        pslValue.setText(String.valueOf(fxgame.game.player.getActiveShips()));
+                        pplValue.setText(String.valueOf(fxgame.game.player.getTotalPoints()));
+                        prlValue.setText(String.format("%.2g", fxgame.game.player.getSuccessRate()));
+                        
                         int s = fxgame.getGameState();
                         if(s != 0) fxgame.terminateGame();
-                        else fxgame.computerTurn();
+                        else
+                        {
+                            fxgame.computerTurn();
+                            //cslValue.setText(String.valueOf(fxgame.game.player.getActiveShips()));
+                            //cplValue.setText(String.valueOf(fxgame.game.player.getTotalPoints()));
+                            //crlValue.setText(String.format("%.2g", fxgame.game.player.getSuccessRate()));
+                        }
+                        
+                        System.out.println(fxgame.game.player.getTotalPoints());
                     }
                 }
             }
@@ -156,53 +198,17 @@ public class Main extends Application
         
         enemyShipsOption.setOnAction(lambda -> {
             if(fxgame.isRunning())
-            {
-                Stage stage = new Stage();
-                stage.setTitle("Enemy Ships");
-                stage.setResizable(false);
-                
-                Label report = new Label();
-                report.setText(fxgame.game.computer.getShipReport());
-                
-                Button close = new Button("Close");
-                close.setOnAction(foo -> {stage.close();});
-                
-                VBox hb = new VBox();
-                hb.getChildren().addAll(report, close);
-                
-                Scene popup = new Scene(hb, 300, 190);
-                stage.setScene(popup);
-                stage.show();
-            }
+                showPopUp("Enemy Ships", fxgame.game.computer.getShipReport());
         });
         
         playerShotsOption.setOnAction(lambda -> {
             if(fxgame.isRunning())
-            {
-                Stage stage = new Stage();
-                stage.setTitle("Player Shots");
-                stage.setResizable(false);
-                
-                Label report = new Label();
-                report.setText(fxgame.game.player.getShotReport());
-                
-                Button close = new Button("Close");
-                close.setOnAction(foo -> {stage.close();});
-                
-                VBox hb = new VBox();
-                hb.getChildren().addAll(report, close);
-                
-                Scene popup = new Scene(hb, 300, 190);
-                stage.setScene(popup);
-                stage.show();
-            }
+                showPopUp("Player Shots", fxgame.game.player.getShotReport());
         });
         
         computerShotsOption.setOnAction(lambda -> {
             if(fxgame.isRunning())
-            {
                 showPopUp("Computer Shots", fxgame.game.computer.getShotReport());
-            }
         });
         
         Scene scene = new Scene(root, 800, 500);
@@ -231,6 +237,37 @@ public class Main extends Application
         hb.getChildren().addAll(report, close);
         
         Scene popup = new Scene(hb, 300, 190);
+        stage.setScene(popup);
+        stage.show();
+    }
+    
+    private void formPopUp()
+    {
+        Stage stage = new Stage();
+        stage.setTitle("Load Text Files");
+        stage.setResizable(false);
+        
+        TextField tf = new TextField();
+        
+        Button load = new Button("Load");
+        load.setOnAction(foo -> {
+            if(!tf.getText().isEmpty())
+            {
+                Game.setFilePath(tf.getText());
+                tf.clear();
+            }
+        });
+        
+        Button close = new Button("Close");
+        close.setOnAction(bar -> {stage.close();});
+        
+        HBox buttons = new HBox();
+        buttons.getChildren().addAll(load, close);
+        
+        VBox vb = new VBox();
+        vb.getChildren().addAll(tf, buttons);
+        
+        Scene popup = new Scene(vb, 300, 190);
         stage.setScene(popup);
         stage.show();
     }

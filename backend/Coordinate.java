@@ -23,6 +23,11 @@ public class Coordinate
         if(userInput.length() == 3) this.y = 9;
     }
     
+    public static boolean isValidCoordinate(int x, int y)
+    {
+        return x >= 0 && x < 10 && y >= 0 && y < 10;
+    }
+    
     public static boolean isValidCoordinate(Coordinate c)
     {
         return c.getX() >= 0 && c.getX() < 10 && c.getY() >= 0 && c.getY() < 10;
