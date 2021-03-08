@@ -50,16 +50,16 @@ public class FXGame
     {
         Coordinate currentMove;
         int outcome;
-        currentMove = game.player.getLatestMove();
-        outcome = game.computerBoard.getHitOutcome(currentMove);
+        currentMove = game.getPlayer().getLatestMove();
+        outcome = game.getComputerBoard().getHitOutcome(currentMove);
         if(outcome == -1) return false;
 
-        game.computer.updateShips(outcome);
-        game.player.incrementMoveCounter();
-        game.player.pushToMoves(currentMove, outcome);
+        game.getComputer().updateShips(outcome);
+        game.getPlayer().incrementMoveCounter();
+        game.getPlayer().pushToMoves(currentMove, outcome);
         if(outcome > 0)
-            if(game.computer.getShips().get(outcome - 1).getState().equals("sunken"))
-                game.player.addPoints(game.computer.getShips().get(outcome - 1).getSinkBonus());
+            if(game.getComputer().getShips().get(outcome - 1).getState().equals("sunken"))
+                game.getPlayer().addPoints(game.getComputer().getShips().get(outcome - 1).getSinkBonus());
         playerFXBoard.update(currentMove, outcome);
         
         return true;
@@ -67,14 +67,14 @@ public class FXGame
     
     public void computerTurn()
     {
-        Coordinate currentMove = game.computer.makeMove();
-        int outcome = game.playerBoard.getHitOutcome(currentMove);
-        game.player.updateShips(outcome);
-        game.computer.incrementMoveCounter();
-        game.computer.pushToMoves(currentMove, outcome);
+        Coordinate currentMove = game.getComputer().makeMove();
+        int outcome = game.getPlayerBoard().getHitOutcome(currentMove);
+        game.getPlayer().updateShips(outcome);
+        game.getComputer().incrementMoveCounter();
+        game.getComputer().pushToMoves(currentMove, outcome);
         if(outcome > 0)
-            if(game.player.getShips().get(outcome - 1).getState().equals("sunken"))
-                game.computer.addPoints(game.player.getShips().get(outcome - 1).getSinkBonus());
+            if(game.getPlayer().getShips().get(outcome - 1).getState().equals("sunken"))
+                game.getComputer().addPoints(game.getPlayer().getShips().get(outcome - 1).getSinkBonus());
         computerFXBoard.update(currentMove, outcome);
     }
 

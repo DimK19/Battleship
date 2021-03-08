@@ -18,9 +18,9 @@ public class Coordinate
     
     public Coordinate(String userInput)
     {
-        this.x = userInput.toUpperCase().charAt(0) - (int)'A';
-        this.y = userInput.charAt(1) - (int)'1';
-        if(userInput.length() == 3) this.y = 9;
+        this.x = Utilities.letterToInt(userInput.toUpperCase().charAt(0));
+        this.y = Utilities.numCharToInt(userInput.charAt(1));
+        if(userInput.length() == 3) this.y = 9; // last row (10)
     }
     
     public static boolean isValidCoordinate(int x, int y)
@@ -36,10 +36,9 @@ public class Coordinate
     public static boolean isValidCoordinate(String s)
     {
         if(s.length() != 2 && s.length() != 3) return false;
-        int x = s.toUpperCase().charAt(0) - (int)'A';
-        int y = s.charAt(1) - (int)'1';
-        System.out.println(x);
-        System.out.println(y);
+        int x = Utilities.letterToInt(s.toUpperCase().charAt(0));
+        int y = Utilities.numCharToInt(s.charAt(1));
+        
         if(x < 0 || x > 9) return false;
         if(s.length() == 2)
         {
@@ -47,7 +46,7 @@ public class Coordinate
         }
         else
         {
-            int y2 = s.charAt(2) - (int)'0';
+            int y2 = Utilities.numCharToInt(s.charAt(2)) + 1; // + 1 because 0 would be mapped to -1
             if(y != 0 || y2 != 0) return false;
         }
         

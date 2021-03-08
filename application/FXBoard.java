@@ -64,6 +64,8 @@ public class FXBoard
             setStroke(Color.BLACK);
         }
 
+        // might be useful if I ever decide to resize
+        @SuppressWarnings("unused")
         public FXCell(double arg0, double arg1)
         {
             super(arg0, arg1);

@@ -106,7 +106,7 @@ public abstract class Player
         
         for(Ship s : this.ships)
         {
-            String temp = s.getName() + ' ' + s.getState() + '\n';
+            String temp = s.getName() + ": " + s.getState() + '\n';
             r += temp;
         }
         
@@ -121,7 +121,7 @@ public abstract class Player
         {
             CustomPair cm = allMovesStack.get(i);
             System.out.println(cm.getLeft().toString() + ' ' + Board.entities[cm.getRight()]);
-            r += cm.getLeft().toString() + ' ' + Board.entities[cm.getRight()] + '\n';
+            r += cm.getLeft().toString() + ": " + Board.entities[cm.getRight()] + '\n';
         }
 
         return r;

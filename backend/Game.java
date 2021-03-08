@@ -1,45 +1,24 @@
 package backend;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Game
 {
     static String playerFilePath = "src/resources/player_default.txt";
     static String computerFilePath = "src/resources/computer_default.txt";
-    public Board playerBoard, computerBoard;
-    public HumanPlayer player;
-    public ComputerPlayer computer;
+    Board playerBoard, computerBoard;
+    HumanPlayer player;
+    ComputerPlayer computer;
     //boolean turn; // 1 -> player, 0 -> computer
     
     public Game() throws IOException, OverlapTilesException, OversizeException, AdjacentTilesException, InvalidCountException
     {
-        this.playerBoard = new Board(this.readFile(playerFilePath));
-        this.computerBoard = new Board(this.readFile(computerFilePath));
+        this.playerBoard = new Board(Utilities.readFile(playerFilePath));
+        this.computerBoard = new Board(Utilities.readFile(computerFilePath));
         
         this.player = new HumanPlayer();
         this.computer = new ComputerPlayer();
-    }
-    
-    public ArrayList<String> readFile(String path) throws IOException
-    {
-        ArrayList<String> l = new ArrayList<String>();
-        
-        FileReader fr = new FileReader(path);
-        BufferedReader br = new BufferedReader(fr);
-        String line = br.readLine();
-        while(line != null)
-        {
-            l.add(line);
-            line = br.readLine();
-        }
-        
-        br.close();
-        
-        return l;
     }
     
     public static void setFilePath(String p)
@@ -48,6 +27,26 @@ public class Game
         computerFilePath = "src/resources/enemy_" + p + ".txt";
     }
     
+    public Board getPlayerBoard()
+    {
+        return playerBoard;
+    }
+
+    public Board getComputerBoard()
+    {
+        return computerBoard;
+    }
+
+    public HumanPlayer getPlayer()
+    {
+        return player;
+    }
+
+    public ComputerPlayer getComputer()
+    {
+        return computer;
+    }
+
     // for command line implementation
     public void play()
     {
@@ -115,7 +114,6 @@ public class Game
         else if(computer.getActiveShips() == 0) state = 2;
         else if(player.getMovesPlayed() == 40 && computer.getMovesPlayed() == 40) state = 3;
         else state = 0;
-        System.out.println(state);
         return state;
     }
 }
