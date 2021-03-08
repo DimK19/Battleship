@@ -97,11 +97,11 @@ public class Main extends Application
             
         
         // create top labels
-        Label pShipsLabel = new Label("Player Active Ships");
+        Label pShipsLabel = new Label("Player Active Ships:  ");
         Label pslValue = new Label(""); 
-        Label pPointsLabel = new Label("Player Points");
+        Label pPointsLabel = new Label("Player Points:  ");
         Label pplValue = new Label("");
-        Label pRateLabel = new Label("Player Success Rate");
+        Label pRateLabel = new Label("Player Success Rate:  ");
         Label prlValue = new Label("");
         
         HBox pline1 = new HBox();
@@ -113,13 +113,24 @@ public class Main extends Application
         
         VBox playerInfoBox = new VBox();
         playerInfoBox.getChildren().addAll(pline1, pline2, pline3);
-        root.setLeft(playerInfoBox);
         
-        /*
-        Label cShipsLabel = new Label("Computer Active Ships");
-        Label cPointsLabel = new Label("Computer Points");
-        Label cRateLabel = new Label("Computer Success Rate");
-        */
+        
+        Label cShipsLabel = new Label("Computer Active Ships:  ");
+        Label cslValue = new Label(""); 
+        Label cPointsLabel = new Label("Computer Points:  ");
+        Label cplValue = new Label(""); 
+        Label cRateLabel = new Label("Computer Success Rate:  ");
+        Label crlValue = new Label("");
+        
+        HBox cline1 = new HBox();
+        cline1.getChildren().addAll(cShipsLabel, cslValue);
+        HBox cline2 = new HBox();
+        cline2.getChildren().addAll(cPointsLabel, cplValue);
+        HBox cline3 = new HBox();
+        cline3.getChildren().addAll(cRateLabel, crlValue);
+        
+        VBox computerInfoBox = new VBox();
+        computerInfoBox.getChildren().addAll(cline1, cline2, cline3);
         
         // install boards
         // board1.setAlignment(Pos.CENTER);
@@ -130,6 +141,9 @@ public class Main extends Application
         HBox board1WithLabels = new HBox();
         board1WithLabels.getChildren().addAll(numbers, board1.getBoard());
         board1WithLabels.setSpacing(5);
+        VBox finalBoard1 = new VBox();
+        finalBoard1.getChildren().addAll(playerInfoBox, board1WithLabels);
+        finalBoard1.setSpacing(10);
         
         letters2.setSpacing(15);
         numbers2.setAlignment(Pos.TOP_RIGHT);
@@ -137,13 +151,16 @@ public class Main extends Application
         HBox board2WithLabels = new HBox();
         board2WithLabels.getChildren().addAll(numbers2, board2.getBoard());
         board2WithLabels.setSpacing(5);
+        VBox finalBoard2 = new VBox();
+        finalBoard2.getChildren().addAll(computerInfoBox, board2WithLabels);
+        finalBoard2.setSpacing(10);
         
         gridPane.setPadding(new Insets(20, 20, 20, 20));
         gridPane.setHgap(100);
-        GridPane.setConstraints(board1WithLabels, 0, 0);
-        GridPane.setConstraints(board2WithLabels, 1, 0);
+        GridPane.setConstraints(finalBoard1, 0, 0);
+        GridPane.setConstraints(finalBoard2, 1, 0);
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.getChildren().addAll(board1WithLabels, board2WithLabels);
+        gridPane.getChildren().addAll(finalBoard1, finalBoard2);
         root.setCenter(gridPane);
         
         // set up game
@@ -155,10 +172,9 @@ public class Main extends Application
             try
             {
                 fxgame.activateGame();
-                //pslValue.textProperty().bind(new SimpleIntegerProperty(fxgame.game.player.getActiveShips()).asString());
-                //pplValue.textProperty().bind(new SimpleIntegerProperty(fxgame.game.player.getTotalPoints()).asString());
-                //prlValue.textProperty().bind(new SimpleStringProperty(String.format("%.2g", fxgame.game.player.getSuccessRate())));
-                //System.out.println("Was");
+                cslValue.setText(String.valueOf(fxgame.game.computer.getActiveShips()));
+                cplValue.setText(String.valueOf(fxgame.game.computer.getTotalPoints()));
+                crlValue.setText(String.format("%.2g", fxgame.game.computer.getSuccessRate()));
             }
             catch (Exception e)
             {
@@ -170,6 +186,7 @@ public class Main extends Application
         shootButton.setOnAction(lambda -> {
             if(fxgame.isRunning())
             {
+                
                 if(Coordinate.isValidCoordinate(moveField.getText()))
                 {
                     fxgame.game.player.setLatestMove(new Coordinate(moveField.getText()));
@@ -185,9 +202,9 @@ public class Main extends Application
                         else
                         {
                             fxgame.computerTurn();
-                            //cslValue.setText(String.valueOf(fxgame.game.player.getActiveShips()));
-                            //cplValue.setText(String.valueOf(fxgame.game.player.getTotalPoints()));
-                            //crlValue.setText(String.format("%.2g", fxgame.game.player.getSuccessRate()));
+                            cslValue.setText(String.valueOf(fxgame.game.computer.getActiveShips()));
+                            cplValue.setText(String.valueOf(fxgame.game.computer.getTotalPoints()));
+                            crlValue.setText(String.format("%.2g", fxgame.game.computer.getSuccessRate()));
                         }
                         
                         System.out.println(fxgame.game.player.getTotalPoints());
