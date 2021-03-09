@@ -69,11 +69,14 @@ public class Main extends Application
         TextField moveField = new TextField();
         Label promptLabel = new Label("Your move:");
         promptLabel.setFont(largerFont);
-        Button shootButton = new Button("Fire!");       
+        Button shootButton = new Button("Fire!");
+        Label outcomeLabel = new Label("");
+        outcomeLabel.setFont(largerFont);
             
         HBox userArea = new HBox();
             
-        userArea.getChildren().addAll(promptLabel, moveField, shootButton);
+        userArea.getChildren().addAll(promptLabel, moveField, shootButton, outcomeLabel);
+        userArea.setSpacing(5);
         root.setBottom(userArea);
             
         // create board label boxes
@@ -180,6 +183,7 @@ public class Main extends Application
             try
             {
                 fxgame.activateGame();
+                outcomeLabel.setText("");
                 cslValue.setText(String.valueOf(fxgame.game.getComputer().getActiveShips()));
                 cplValue.setText(String.valueOf(fxgame.game.getComputer().getTotalPoints()));
                 crlValue.setText(String.format("%.2g", fxgame.game.getComputer().getSuccessRate()));
@@ -215,6 +219,20 @@ public class Main extends Application
                             crlValue.setText(String.format("%.2g", fxgame.game.getComputer().getSuccessRate()));
                         }
                     }
+                }
+                if(fxgame.getGameState() == 1)
+                {
+                    outcomeLabel.setText("Player wins!");
+                }
+                else if(fxgame.getGameState() == 2)
+                {
+                    outcomeLabel.setText("Computer wins!");
+                }
+                else if(fxgame.getGameState() == 3)
+                {
+                    if(fxgame.game.getPlayer().getTotalPoints() > fxgame.game.getComputer().getTotalPoints()) outcomeLabel.setText("Player wins!");
+                    else if(fxgame.game.getPlayer().getTotalPoints() < fxgame.game.getComputer().getTotalPoints()) outcomeLabel.setText("Computer wins!");
+                    else outcomeLabel.setText( "It's a draw!");
                 }
             }
         });
