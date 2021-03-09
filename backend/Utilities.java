@@ -1,6 +1,7 @@
 package backend;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,16 +12,24 @@ public class Utilities
     {
         ArrayList<String> l = new ArrayList<String>();
         
-        FileReader fr = new FileReader(path);
-        BufferedReader br = new BufferedReader(fr);
-        String line = br.readLine();
-        while(line != null)
+        try
         {
-            l.add(line);
-            line = br.readLine();
+            FileReader fr = new FileReader(path);
+            BufferedReader br = new BufferedReader(fr);
+            String line = br.readLine();
+            while(line != null)
+            {
+                l.add(line);
+                line = br.readLine();
+            }
+            
+            br.close();
         }
-        
-        br.close();
+        catch(FileNotFoundException e)
+        {
+            System.out.println("Could not find the specified scenario id!");
+            e.printStackTrace();            
+        }
         
         return l;
     }

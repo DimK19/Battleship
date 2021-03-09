@@ -1,5 +1,9 @@
 package backend;
 
+/*
+ * TODO Implement as generic
+ */
+
 public class CustomPair
 {
     Coordinate c;
